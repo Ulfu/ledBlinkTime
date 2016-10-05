@@ -20,13 +20,14 @@ const int ledPin =  13;      // the number of the LED pin
 // these variables can change
 boolean addButtonValue = true;   //Current add button value
 boolean deButtonValue = true; //Current decrease button value
+boolean ledState = true;
 int ledBlinkTime = 0; //Current time to wait before next led blink
 
 // Data type void has no return value
 void setup() { // Setup runs a single time
   // initialize the LED pin as an output:
   pinMode(ledPin, OUTPUT);
-  // initialize the pushbutton pin as an input_pullup (eliminates the need for a external resistor):
+  // initialize the pushbutton pins as an input_pullup (eliminates the need for a external resistor):
   pinMode(addButtonPin, INPUT_PULLUP);
   pinMode(deButtonPin, INPUT_PULLUP);
   Serial.begin(9600); // Initate serial communication at 9600 baud rate
@@ -42,10 +43,9 @@ void loop() { // loop runs forever, basically an infinite while loop
   if (!deButtonValue) { //Check if the button is pressed
       ledBlinkTime -= 10; //decrease delay value
     }
+  ledState = !ledState; // assign the invertet value of ledState to ledState
   ledBlinkTime = constrain(ledBlinkTime, 0, 30000); // Constrain ledBlinkTime between 0 and 30000
-  digitalWrite(ledPin, HIGH); //Write the values
-  delayMicroseconds(ledBlinkTime*2);  //Pause the program for ledBlinkTime times 2
-  digitalWrite(ledPin, LOW); //Write the values
-  delayMicroseconds(ledBlinkTime*2);  //Pauses for the time ledBlinkTime times 2
+  digitalWrite(ledPin, ledState); //Write the values
+  delay(ledBlinkTime);  //Pause the program for ledBlinkTime milliSeconds
   Serial.println(ledBlinkTime); //Print the value of ledBlinkTime in the serial stream
 }
